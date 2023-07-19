@@ -126,7 +126,7 @@ class _HealthAppState extends State<HealthApp> {
         _nofSteps = (steps == null) ? 0 : steps;
         _state = (steps == null) ? AppState.NO_DATA : AppState.STEPS_READY;
       });
-      var dateFormatted = DateFormat('yyyy-MM-ddTHH:mm:ss', 'en-US')
+      var dateFormatted = DateFormat('yyyy-MM-dd HH:mm:ss', 'en-US')
           .format(now);
       _uploadService.uploadStep(
           _nofSteps.toString(), dateFormatted);
@@ -167,7 +167,7 @@ class _HealthAppState extends State<HealthApp> {
     for (int i = 0; i < _healthDataList.length; i++) {
 
       if (_healthDataList[i].type == HealthDataType.HEART_RATE) {
-        var dateFormatted = DateFormat('yyyy-MM-ddTHH:mm:ss', 'en-US')
+        var dateFormatted = DateFormat('yyyy-MM-dd HH:mm:ss', 'en-US')
             .format(_healthDataList[i].dateTo);
         _uploadService.uploadHeartRate(
             _healthDataList[i].value.toString(), dateFormatted);
@@ -176,7 +176,7 @@ class _HealthAppState extends State<HealthApp> {
 
     for (int i = 0; i < _healthDataList.length; i++) {
       if (_healthDataList[i].type == HealthDataType.SLEEP_REM) {
-        var dateFormatted = DateFormat('yyyy-MM-ddTHH:mm:ss', 'en-US')
+        var dateFormatted = DateFormat('yyyy-MM-dd HH:mm:ss', 'en-US')
             .format(_healthDataList[i].dateTo);
         _uploadService.uploadSleepData(
             _healthDataList[i].value.toString(), dateFormatted);
@@ -186,7 +186,7 @@ class _HealthAppState extends State<HealthApp> {
 
     for (int i = 0; i < _healthDataList.length; i++) {
       if (_healthDataList[i].type == HealthDataType.BLOOD_OXYGEN) {
-        var dateFormatted = DateFormat('yyyy-MM-ddTHH:mm:ss', 'en-US')
+        var dateFormatted = DateFormat('yyyy-MM-dd HH:mm:ss', 'en-US')
             .format(_healthDataList[i].dateTo);
         _uploadService.uploadBloodGlucose(
             _healthDataList[i].value.toString(), dateFormatted);

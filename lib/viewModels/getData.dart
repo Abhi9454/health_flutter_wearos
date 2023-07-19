@@ -59,7 +59,7 @@ class GetData{
   readData() async{
     print("now called in");
     final now = DateTime.now();
-    final yesterday = now.subtract(const Duration(hours: 1));
+    final yesterday = now.subtract(const Duration(hours: 24));
 
     // Clear old data points
     _healthDataList.clear();
