@@ -1,4 +1,4 @@
-package com.example.health_flutter
+package com.healthportalplus.bootspider
 
 import io.flutter.embedding.android.FlutterActivity
 
