@@ -24,6 +24,7 @@ dev_dependencies:
   shared_preferences: ^2.2.0
   intl: ^0.18.1
   workmanager: ^0.5.1
+  flutter_activity_recognition: ^2.0.0
 
 flutter:
 

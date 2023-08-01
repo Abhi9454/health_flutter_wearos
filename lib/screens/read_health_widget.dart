@@ -40,9 +40,7 @@ class _HealthAppState extends State<HealthApp> {
   String userName = '';
 
   static final types = [
-    HealthDataType.SLEEP_REM,
-    HealthDataType.SLEEP_LIGHT,
-    HealthDataType.SLEEP_DEEP,
+    // HealthDataType.SLEEP_DEEP,
     HealthDataType.SLEEP_ASLEEP,
     HealthDataType.STEPS,
     HealthDataType.HEART_RATE,
@@ -61,9 +59,11 @@ class _HealthAppState extends State<HealthApp> {
     String? codeId = _preferences.getString('codeId') ?? '';
     userName = _preferences.getString('userName') ?? '';
     if (codeId.isNotEmpty) {
-      showLogin = false;
+      setState(() {
+        showLogin = false;
+      });
     }
-    setState(() {});
+
   }
 
   final permissions = types.map((e) => HealthDataAccess.READ).toList();
@@ -73,7 +73,9 @@ class _HealthAppState extends State<HealthApp> {
   authorize(String email, String password) async {
     bool loginValue = await _loginService.login(email, password);
     if (loginValue) {
-
+      setState(() {
+        showLogin = false;
+      });
       await Permission.activityRecognition.request();
       await Permission.location.request();
 
@@ -93,15 +95,15 @@ class _HealthAppState extends State<HealthApp> {
         }
       }
 
-      setState(() => _state =
-          (authorized) ? AppState.AUTHORIZED : AppState.AUTH_NOT_GRANTED);
+      setState(() {
+        print("this is called");
+        _state =
+        (authorized) ? AppState.AUTHORIZED : AppState.AUTH_NOT_GRANTED;
+      });
+      fetchData();
     } else {
       errorString = 'Invalid UserName or Password';
     }
-    setState(() {
-      showLogin = false;
-    });
-    fetchData();
   }
 
   Future fetchStepData() async {
@@ -255,9 +257,9 @@ class _HealthAppState extends State<HealthApp> {
   }
 
   Widget _contentNotFetched() {
-    return Column(
+    return const Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
+      children: [
         Text('Press the download button to fetch data.'),
         Text('Press the plus button to insert some random data.'),
         Text('Press the walking button to get total step count.'),

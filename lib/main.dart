@@ -5,9 +5,9 @@ import 'package:workmanager/workmanager.dart';
 
 @pragma('vm:entry-point') // Mandatory if the App is obfuscated or using Flutter 3.1+
 void callbackDispatcher() {
-  GetData _getData = GetData();
   Workmanager().executeTask((task, inputData) {
-    _getData.readData();
+    GetData getData = GetData();
+    getData.readData();
     return Future.value(true);
   });
 }
