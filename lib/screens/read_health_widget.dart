@@ -257,7 +257,7 @@ class _HealthAppState extends State<HealthApp> {
   }
 
   Widget _contentNotFetched() {
-    return const Column(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text('Press the download button to fetch data.'),
