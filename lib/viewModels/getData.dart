@@ -58,54 +58,58 @@ class GetData{
 
   readData() async{
     print("now called in");
-    final now = DateTime.now();
-    final yesterday = now.subtract(const Duration(hours: 24));
+    _preferences = await SharedPreferences.getInstance();
+    String? codeId = _preferences.getString('codeId') ?? '';
+    if(codeId.isNotEmpty){
+      final now = DateTime.now();
+      final yesterday = now.subtract(const Duration(hours: 24));
 
-    // Clear old data points
-    _healthDataList.clear();
+      // Clear old data points
+      _healthDataList.clear();
 
-    fetchStepData();
+      fetchStepData();
 
-    try {
-      List<HealthDataPoint> healthData =
-          await health.getHealthDataFromTypes(yesterday, now, types);
-      _healthDataList.addAll(healthData);
+      try {
+        List<HealthDataPoint> healthData =
+        await health.getHealthDataFromTypes(yesterday, now, types);
+        _healthDataList.addAll(healthData);
 
-    } catch (error) {
-      print("Exception in getHealthDataFromTypes: $error");
-    }
-
-    // filter out duplicates
-    _healthDataList = HealthFactory.removeDuplicates(_healthDataList);
-
-    print(_healthDataList.toString());
-
-
-    for (int i = 0; i < _healthDataList.length; i++) {
-      if (_healthDataList[i].type == HealthDataType.HEART_RATE) {
-        var dateFormatted = DateFormat('yyyy-MM-ddTHH:mm:ss', 'en-US')
-            .format(_healthDataList[i].dateTo);
-        _uploadService.uploadHeartRate(
-            _healthDataList[i].value.toString(), dateFormatted);
+      } catch (error) {
+        print("Exception in getHealthDataFromTypes: $error");
       }
-    }
 
-    for (int i = 0; i < _healthDataList.length; i++) {
-      if (_healthDataList[i].type == HealthDataType.SLEEP_REM) {
-        var dateFormatted = DateFormat('yyyy-MM-ddTHH:mm:ss', 'en-US')
-            .format(_healthDataList[i].dateTo);
-        _uploadService.uploadSleepData(
-            _healthDataList[i].value.toString(), dateFormatted);
+      // filter out duplicates
+      _healthDataList = HealthFactory.removeDuplicates(_healthDataList);
+
+      print(_healthDataList.toString());
+
+
+      for (int i = 0; i < _healthDataList.length; i++) {
+        if (_healthDataList[i].type == HealthDataType.HEART_RATE) {
+          var dateFormatted = DateFormat('yyyy-MM-ddTHH:mm:ss', 'en-US')
+              .format(_healthDataList[i].dateTo);
+          _uploadService.uploadHeartRate(
+              _healthDataList[i].value.toString(), dateFormatted);
+        }
       }
-    }
+
+      for (int i = 0; i < _healthDataList.length; i++) {
+        if (_healthDataList[i].type == HealthDataType.SLEEP_REM) {
+          var dateFormatted = DateFormat('yyyy-MM-ddTHH:mm:ss', 'en-US')
+              .format(_healthDataList[i].dateTo);
+          _uploadService.uploadSleepData(
+              _healthDataList[i].value.toString(), dateFormatted);
+        }
+      }
 
 
-    for (int i = 0; i < _healthDataList.length; i++) {
-      if (_healthDataList[i].type == HealthDataType.BLOOD_OXYGEN) {
-        var dateFormatted = DateFormat('yyyy-MM-ddTHH:mm:ss', 'en-US')
-            .format(_healthDataList[i].dateTo);
-        _uploadService.uploadBloodGlucose(
-            _healthDataList[i].value.toString(), dateFormatted);
+      for (int i = 0; i < _healthDataList.length; i++) {
+        if (_healthDataList[i].type == HealthDataType.BLOOD_OXYGEN) {
+          var dateFormatted = DateFormat('yyyy-MM-ddTHH:mm:ss', 'en-US')
+              .format(_healthDataList[i].dateTo);
+          _uploadService.uploadBloodGlucose(
+              _healthDataList[i].value.toString(), dateFormatted);
+        }
       }
     }
   }

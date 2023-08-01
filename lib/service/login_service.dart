@@ -7,7 +7,7 @@ class LoginService{
 
   late SharedPreferences _preferences;
 
-  Future<bool> login(String email, String password) async{
+  Future<String> login(String email, String password) async{
     _preferences = await SharedPreferences.getInstance();
     String codeId = '';
     String userName = '';
@@ -29,8 +29,8 @@ class LoginService{
       print("this is codeid " + codeId);
       _preferences.setString('codeId', codeId);
       _preferences.setString('userName', userName);
-      return true;
+      return userName;
     }
-    return false;
+    return '';
   }
 }

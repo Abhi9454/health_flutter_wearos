@@ -63,7 +63,6 @@ class _HealthAppState extends State<HealthApp> {
         showLogin = false;
       });
     }
-
   }
 
   final permissions = types.map((e) => HealthDataAccess.READ).toList();
@@ -71,10 +70,11 @@ class _HealthAppState extends State<HealthApp> {
   HealthFactory health = HealthFactory(useHealthConnectIfAvailable: true);
 
   authorize(String email, String password) async {
-    bool loginValue = await _loginService.login(email, password);
-    if (loginValue) {
+    String  userName = await _loginService.login(email, password);
+    if (userName.isNotEmpty) {
       setState(() {
         showLogin = false;
+        this.userName = userName;
       });
       await Permission.activityRecognition.request();
       await Permission.location.request();
@@ -316,101 +316,99 @@ class _HealthAppState extends State<HealthApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Health Portal Plus'),
-        ),
-        body: showLogin
-            ? Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: 15.0, right: 15, top: 5.0, bottom: 5.0),
-                    child: TextFormField(
-                      autofocus: false,
-                      controller: emailController,
-                      style: const TextStyle(color: Colors.black, fontSize: 18),
-                      decoration: const InputDecoration(
-                          hintText: 'Enter Email',
-                          enabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.grey, width: 0.0),
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.grey, width: 0.0),
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                          )),
-                    ),
+    return  Scaffold(
+      appBar: AppBar(
+        title: const Text('Health Portal Plus'),
+      ),
+      body: showLogin
+          ? Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(
+                left: 15.0, right: 15, top: 5.0, bottom: 5.0),
+            child: TextFormField(
+              autofocus: false,
+              controller: emailController,
+              style: const TextStyle(color: Colors.black, fontSize: 18),
+              decoration: const InputDecoration(
+                  hintText: 'Enter Email',
+                  enabledBorder: OutlineInputBorder(
+                    borderSide:
+                    BorderSide(color: Colors.grey, width: 0.0),
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: 15.0, right: 15, top: 5.0, bottom: 5.0),
-                    child: TextFormField(
-                      autofocus: false,
-                      controller: passwordController,
-                      style: const TextStyle(color: Colors.black, fontSize: 18),
-                      decoration: const InputDecoration(
-                          hintText: 'Enter Password',
-                          enabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.grey, width: 0.0),
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: Colors.grey, width: 0.0),
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                          )),
-                    ),
-                  ),
-                  TextButton(
-                      onPressed: () {
-                        if (emailController.text.isNotEmpty &&
-                            passwordController.text.isNotEmpty) {
-                          authorize(
-                              emailController.text, passwordController.text);
-                        } else {
-                          const snackBar = SnackBar(
-                            content: Text(
-                              'Empty Fields....',
-                              style:
-                                  TextStyle(fontSize: 15, color: Colors.white),
-                            ),
-                            backgroundColor: Colors.black26,
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        }
-                      },
-                      style: const ButtonStyle(
-                          backgroundColor:
-                              MaterialStatePropertyAll(Colors.blue)),
-                      child: const Text("Login and Authorize",
-                          style: TextStyle(color: Colors.white))),
-                ],
-              )
-            : Center(
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text('Hi, $userName, Already Logged In.'),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextButton(
-                          onPressed: fetchData,
-                          style: const ButtonStyle(
-                              backgroundColor:
-                                  MaterialStatePropertyAll(Colors.blue)),
-                          child: const Text("Fetch",
-                              style: TextStyle(color: Colors.white))),
-                    ),
-                  ],
-                ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide:
+                    BorderSide(color: Colors.grey, width: 0.0),
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  )),
             ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+                left: 15.0, right: 15, top: 5.0, bottom: 5.0),
+            child: TextFormField(
+              autofocus: false,
+              controller: passwordController,
+              style: const TextStyle(color: Colors.black, fontSize: 18),
+              decoration: const InputDecoration(
+                  hintText: 'Enter Password',
+                  enabledBorder: OutlineInputBorder(
+                    borderSide:
+                    BorderSide(color: Colors.grey, width: 0.0),
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide:
+                    BorderSide(color: Colors.grey, width: 0.0),
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  )),
+            ),
+          ),
+          TextButton(
+              onPressed: () {
+                if (emailController.text.isNotEmpty &&
+                    passwordController.text.isNotEmpty) {
+                  authorize(
+                      emailController.text, passwordController.text);
+                } else {
+                  const snackBar = SnackBar(
+                    content: Text(
+                      'Empty Fields....',
+                      style:
+                      TextStyle(fontSize: 15, color: Colors.white),
+                    ),
+                    backgroundColor: Colors.black26,
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                }
+              },
+              style: const ButtonStyle(
+                  backgroundColor:
+                  MaterialStatePropertyAll(Colors.blue)),
+              child: const Text("Login and Authorize",
+                  style: TextStyle(color: Colors.white))),
+        ],
+      )
+          : Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text('Hi, $userName, Already Logged In.'),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextButton(
+                  onPressed: fetchData,
+                  style: const ButtonStyle(
+                      backgroundColor:
+                      MaterialStatePropertyAll(Colors.blue)),
+                  child: const Text("Fetch",
+                      style: TextStyle(color: Colors.white))),
+            ),
+          ],
+        ),
       ),
     );
   }
