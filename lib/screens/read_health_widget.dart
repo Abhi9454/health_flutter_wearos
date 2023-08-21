@@ -2,20 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:health/health.dart';
 import 'package:health_flutter/service/login_service.dart';
 import 'package:health_flutter/service/upload_service.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../helpers/enums.dart';
 import 'package:workmanager/workmanager.dart';
 
+import '../helpers/enums.dart';
 
 @pragma(
     'vm:entry-point') // Mandatory if the App is obfuscated or using Flutter 3.1+
 void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
-    if(task == "simpleTaskKey"){
-    }
+    if (task == "simpleTaskKey") {}
 
     return Future.value(true);
   });
@@ -70,7 +68,7 @@ class _HealthAppState extends State<HealthApp> {
   HealthFactory health = HealthFactory(useHealthConnectIfAvailable: true);
 
   authorize(String email, String password) async {
-    String  userName = await _loginService.login(email, password);
+    String userName = await _loginService.login(email, password);
     if (userName.isNotEmpty) {
       setState(() {
         showLogin = false;
@@ -97,8 +95,7 @@ class _HealthAppState extends State<HealthApp> {
 
       setState(() {
         print("this is called");
-        _state =
-        (authorized) ? AppState.AUTHORIZED : AppState.AUTH_NOT_GRANTED;
+        _state = (authorized) ? AppState.AUTHORIZED : AppState.AUTH_NOT_GRANTED;
       });
       fetchData();
     } else {
@@ -128,10 +125,9 @@ class _HealthAppState extends State<HealthApp> {
         _nofSteps = (steps == null) ? 0 : steps;
         _state = (steps == null) ? AppState.NO_DATA : AppState.STEPS_READY;
       });
-      var dateFormatted = DateFormat('yyyy-MM-dd HH:mm:ss', 'en-US')
-          .format(now);
-      _uploadService.uploadStep(
-          _nofSteps.toString(), dateFormatted);
+      var dateFormatted =
+          DateFormat('yyyy-MM-dd HH:mm:ss', 'en-US').format(now);
+      _uploadService.uploadStep(_nofSteps.toString(), dateFormatted);
       print(_nofSteps.toString());
     } else {
       print("Authorization not granted - error in authorization");
@@ -155,7 +151,6 @@ class _HealthAppState extends State<HealthApp> {
       List<HealthDataPoint> healthData =
           await health.getHealthDataFromTypes(yesterday, now, types);
       _healthDataList.addAll(healthData);
-
     } catch (error) {
       print("Exception in getHealthDataFromTypes: $error");
     }
@@ -165,9 +160,7 @@ class _HealthAppState extends State<HealthApp> {
 
     print(_healthDataList.toString());
 
-
     for (int i = 0; i < _healthDataList.length; i++) {
-
       if (_healthDataList[i].type == HealthDataType.HEART_RATE) {
         var dateFormatted = DateFormat('yyyy-MM-dd HH:mm:ss', 'en-US')
             .format(_healthDataList[i].dateTo);
@@ -184,7 +177,6 @@ class _HealthAppState extends State<HealthApp> {
             _healthDataList[i].value.toString(), dateFormatted);
       }
     }
-
 
     for (int i = 0; i < _healthDataList.length; i++) {
       if (_healthDataList[i].type == HealthDataType.BLOOD_OXYGEN) {
@@ -246,7 +238,7 @@ class _HealthAppState extends State<HealthApp> {
           }
           return ListTile(
             title: Text("${p.typeString}: ${p.value}"),
-            trailing: Text('${p.unitString}'),
+            trailing: Text(p.unitString),
             subtitle: Text('${p.dateFrom} - ${p.dateTo}'),
           );
         });
@@ -257,12 +249,10 @@ class _HealthAppState extends State<HealthApp> {
   }
 
   Widget _contentNotFetched() {
-    return Column(
+    return const Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text('Press the download button to fetch data.'),
-        Text('Press the plus button to insert some random data.'),
-        Text('Press the walking button to get total step count.'),
+        Text('Press the fetch button to fetch data.'),
       ],
     );
   }
@@ -316,100 +306,103 @@ class _HealthAppState extends State<HealthApp> {
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       appBar: AppBar(
         title: const Text('Health Portal Plus'),
       ),
       body: showLogin
           ? Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(
-                left: 15.0, right: 15, top: 5.0, bottom: 5.0),
-            child: TextFormField(
-              autofocus: false,
-              controller: emailController,
-              style: const TextStyle(color: Colors.black, fontSize: 18),
-              decoration: const InputDecoration(
-                  hintText: 'Enter Email',
-                  enabledBorder: OutlineInputBorder(
-                    borderSide:
-                    BorderSide(color: Colors.grey, width: 0.0),
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 15.0, right: 15, top: 5.0, bottom: 5.0),
+                  child: TextFormField(
+                    autofocus: false,
+                    controller: emailController,
+                    style: const TextStyle(color: Colors.black, fontSize: 18),
+                    decoration: const InputDecoration(
+                        hintText: 'Enter Email',
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.grey, width: 0.0),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.grey, width: 0.0),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        )),
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide:
-                    BorderSide(color: Colors.grey, width: 0.0),
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                  )),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(
-                left: 15.0, right: 15, top: 5.0, bottom: 5.0),
-            child: TextFormField(
-              autofocus: false,
-              controller: passwordController,
-              style: const TextStyle(color: Colors.black, fontSize: 18),
-              decoration: const InputDecoration(
-                  hintText: 'Enter Password',
-                  enabledBorder: OutlineInputBorder(
-                    borderSide:
-                    BorderSide(color: Colors.grey, width: 0.0),
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(
+                      left: 15.0, right: 15, top: 5.0, bottom: 5.0),
+                  child: TextFormField(
+                    autofocus: false,
+                    controller: passwordController,
+                    style: const TextStyle(color: Colors.black, fontSize: 18),
+                    decoration: const InputDecoration(
+                        hintText: 'Enter Password',
+                        enabledBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.grey, width: 0.0),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: Colors.grey, width: 0.0),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        )),
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide:
-                    BorderSide(color: Colors.grey, width: 0.0),
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                  )),
+                ),
+                TextButton(
+                    onPressed: () {
+                      if (emailController.text.isNotEmpty &&
+                          passwordController.text.isNotEmpty) {
+                        authorize(
+                            emailController.text, passwordController.text);
+                      } else {
+                        const snackBar = SnackBar(
+                          content: Text(
+                            'Empty Fields....',
+                            style: TextStyle(fontSize: 15, color: Colors.white),
+                          ),
+                          backgroundColor: Colors.black26,
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      }
+                    },
+                    style: const ButtonStyle(
+                        backgroundColor: MaterialStatePropertyAll(Colors.blue)),
+                    child: const Text("Login and Authorize",
+                        style: TextStyle(color: Colors.white))),
+              ],
+            )
+          : SizedBox(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Text('Hi, $userName, Already Logged In.'),
+                  ),
+                  Wrap(
+                    spacing: 10,
+                    children: [
+                      TextButton(
+                          onPressed: fetchData,
+                          style: const ButtonStyle(
+                              backgroundColor:
+                                  MaterialStatePropertyAll(Colors.blue)),
+                          child: const Text("Fetch Data",
+                              style: TextStyle(color: Colors.white))),
+                    ],
+                  ),
+                  const Divider(thickness: 3),
+                  Expanded(child: Center(child: _content()))
+                ],
+              ),
             ),
-          ),
-          TextButton(
-              onPressed: () {
-                if (emailController.text.isNotEmpty &&
-                    passwordController.text.isNotEmpty) {
-                  authorize(
-                      emailController.text, passwordController.text);
-                } else {
-                  const snackBar = SnackBar(
-                    content: Text(
-                      'Empty Fields....',
-                      style:
-                      TextStyle(fontSize: 15, color: Colors.white),
-                    ),
-                    backgroundColor: Colors.black26,
-                  );
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                }
-              },
-              style: const ButtonStyle(
-                  backgroundColor:
-                  MaterialStatePropertyAll(Colors.blue)),
-              child: const Text("Login and Authorize",
-                  style: TextStyle(color: Colors.white))),
-        ],
-      )
-          : Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text('Hi, $userName, Already Logged In.'),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextButton(
-                  onPressed: fetchData,
-                  style: const ButtonStyle(
-                      backgroundColor:
-                      MaterialStatePropertyAll(Colors.blue)),
-                  child: const Text("Fetch",
-                      style: TextStyle(color: Colors.white))),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
