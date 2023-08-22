@@ -9,15 +9,6 @@ import 'package:workmanager/workmanager.dart';
 
 import '../helpers/enums.dart';
 
-@pragma(
-    'vm:entry-point') // Mandatory if the App is obfuscated or using Flutter 3.1+
-void callbackDispatcher() {
-  Workmanager().executeTask((task, inputData) async {
-    if (task == "simpleTaskKey") {}
-
-    return Future.value(true);
-  });
-}
 
 class HealthApp extends StatefulWidget {
   const HealthApp({super.key});
@@ -39,10 +30,9 @@ class _HealthAppState extends State<HealthApp> {
 
   static final types = [
     // HealthDataType.SLEEP_DEEP,
-    HealthDataType.SLEEP_ASLEEP,
     HealthDataType.STEPS,
     HealthDataType.HEART_RATE,
-    HealthDataType.BLOOD_OXYGEN,
+    HealthDataType.BLOOD_GLUCOSE,
   ];
 
   @override
@@ -220,22 +210,6 @@ class _HealthAppState extends State<HealthApp> {
         itemCount: _healthDataList.length,
         itemBuilder: (_, index) {
           HealthDataPoint p = _healthDataList[index];
-          if (p.value is AudiogramHealthValue) {
-            return ListTile(
-              title: Text("${p.typeString}: ${p.value}"),
-              trailing: Text('${p.unitString}'),
-              subtitle: Text('${p.dateFrom} - ${p.dateTo}'),
-            );
-          }
-          if (p.value is WorkoutHealthValue) {
-            return ListTile(
-              title: Text(
-                  "${p.typeString}: ${(p.value as WorkoutHealthValue).totalEnergyBurned} ${(p.value as WorkoutHealthValue).totalEnergyBurnedUnit?.name}"),
-              trailing: Text(
-                  (p.value as WorkoutHealthValue).workoutActivityType.name),
-              subtitle: Text('${p.dateFrom} - ${p.dateTo}'),
-            );
-          }
           return ListTile(
             title: Text("${p.typeString}: ${p.value}"),
             trailing: Text(p.unitString),
