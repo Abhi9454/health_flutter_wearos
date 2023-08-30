@@ -32,7 +32,8 @@ class _HealthAppState extends State<HealthApp> {
     // HealthDataType.SLEEP_DEEP,
     HealthDataType.STEPS,
     HealthDataType.HEART_RATE,
-    HealthDataType.BLOOD_GLUCOSE,
+    HealthDataType.BLOOD_OXYGEN,
+    HealthDataType.SLEEP_SESSION,
   ];
 
   @override
@@ -160,7 +161,7 @@ class _HealthAppState extends State<HealthApp> {
     }
 
     for (int i = 0; i < _healthDataList.length; i++) {
-      if (_healthDataList[i].type == HealthDataType.SLEEP_REM) {
+      if (_healthDataList[i].type == HealthDataType.SLEEP_SESSION) {
         var dateFormatted = DateFormat('yyyy-MM-dd HH:mm:ss', 'en-US')
             .format(_healthDataList[i].dateTo);
         _uploadService.uploadSleepData(
@@ -223,7 +224,7 @@ class _HealthAppState extends State<HealthApp> {
   }
 
   Widget _contentNotFetched() {
-    return const Column(
+    return  Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text('Press the fetch button to fetch data.'),
