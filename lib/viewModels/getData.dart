@@ -17,10 +17,7 @@ class GetData{
   HealthFactory health = HealthFactory(useHealthConnectIfAvailable: true);
 
   static final types = [
-    HealthDataType.SLEEP_REM,
-    HealthDataType.SLEEP_LIGHT,
-    HealthDataType.SLEEP_DEEP,
-    HealthDataType.SLEEP_ASLEEP,
+    HealthDataType.SLEEP_SESSION,
     HealthDataType.STEPS,
     HealthDataType.HEART_RATE,
     HealthDataType.BLOOD_OXYGEN,

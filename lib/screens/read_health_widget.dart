@@ -352,6 +352,12 @@ class _HealthAppState extends State<HealthApp> {
                         backgroundColor: MaterialStatePropertyAll(Colors.blue)),
                     child: const Text("Login and Authorize",
                         style: TextStyle(color: Colors.white))),
+                const Padding(
+                  padding: EdgeInsets.all(15.0),
+                  child: Text(
+                    'The use of information received from Health Connect will adhere to the Health Connect Permissions policy, including the Limited Use requirements.',
+                  ),
+                )
               ],
             )
           : SizedBox(
